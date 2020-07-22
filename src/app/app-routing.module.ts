@@ -1,35 +1,41 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { AuthGuardService } from './services/auth-guard.service';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
+    path: 'home',
+    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+  },
+  {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'home',
     pathMatch: 'full'
   },
   {
     path: 'login',
-    loadChildren: './public/login/login.module#LoginPageModule'
+    loadChildren: () => import('./login/components/login/login.module').then( m => m.LoginPageModule)
   },
   {
-    path: 'register',
-    loadChildren: './public/register/register.module#RegisterPageModule'
+    path: 'components',
+    loadChildren: () => import('./login/components/components.module').then( m => m.ComponentsPageModule)
   },
   {
-    path: 'otp',
-    loadChildren: './public/otp/otp.module#OtpPageModule'
+    path: 'components',
+    loadChildren: () => import('./channels/components/components.module').then( m => m.ComponentsPageModule)
   },
   {
-    path: 'members',
-    canActivate: [AuthGuardService],
-    loadChildren: './members/member-routing.module#MemberRoutingModule'
-  }
+    path: 'login',
+    loadChildren: () => import('./login/components/login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'channels.component',
+    loadChildren: () => import('./channels/components/channels.component/channels.component.module').then( m => m.Channels.ComponentPageModule)
+  },
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],
   exports: [RouterModule]
 })
